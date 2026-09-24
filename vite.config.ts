@@ -16,8 +16,8 @@ export default defineConfig({
         name: 'AI Vault — Discover Free AI Tools',
         short_name: 'AI Vault',
         description: 'Discover, compare and launch thousands of free and free-tier AI websites and tools in one modern directory.',
-        theme_color: '#090a0f',
-        background_color: '#090a0f',
+        theme_color: '#FF4D00',
+        background_color: '#FF4D00',
         display: 'standalone',
         orientation: 'portrait-primary',
         icons: [
