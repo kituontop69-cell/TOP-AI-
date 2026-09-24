@@ -3,6 +3,7 @@ import { ActiveTab, AITool, FilterState } from './types';
 import { toolStorage, STORAGE_CHANGE_EVENT } from './services/toolStorage';
 import { analytics } from './services/analytics';
 import { usePWA } from './hooks/usePWA';
+import { useTheme } from './hooks/useTheme';
 
 // Components
 import { Navbar } from './components/Navbar';
@@ -30,6 +31,9 @@ export function App() {
   const [tools, setTools] = useState<AITool[]>(() => toolStorage.getAllTools());
   const [favorites, setFavorites] = useState<string[]>(() => toolStorage.getFavorites());
   const [recentlyUsed, setRecentlyUsed] = useState<AITool[]>(() => toolStorage.getRecentlyUsed());
+
+  // 3-Mode Theme Engine: 'default' (Kinetic Orange) | 'dark' (Cyber Stealth) | 'light' (Studio Paper)
+  const { theme, setTheme, cycleTheme } = useTheme();
 
   // Filter state
   const [filters, setFilters] = useState<FilterState>({
@@ -225,7 +229,7 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FF4D00] text-[#000000] selection:bg-black selection:text-[#FF4D00] pb-safe md:pb-0">
+    <div className="min-h-screen flex flex-col theme-page-bg theme-page-text selection:bg-black selection:text-[#FF4D00] pb-safe md:pb-0">
       {/* Cinematic 5-Second Emergency Preloader */}
       {isLoadingPreloader && (
         <CinematicPreloader onComplete={handlePreloaderComplete} />
@@ -248,6 +252,9 @@ export function App() {
         onInstallClick={promptInstall}
         onOpenCreator={() => setShowCreatorModal(true)}
         isInstallHighlighted={showInstallHint && !isInstalled}
+        theme={theme}
+        setTheme={setTheme}
+        cycleTheme={cycleTheme}
       />
 
       {/* View router */}

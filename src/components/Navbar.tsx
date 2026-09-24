@@ -12,6 +12,8 @@ import {
   ArrowUpRight,
   Coffee
 } from 'lucide-react';
+import { ThemeToggle } from './ThemeToggle';
+import type { ThemeMode } from '../hooks/useTheme';
 
 interface NavbarProps {
   activeTab: ActiveTab;
@@ -24,6 +26,9 @@ interface NavbarProps {
   onInstallClick: () => void;
   onOpenCreator?: () => void;
   isInstallHighlighted?: boolean;
+  theme: ThemeMode;
+  setTheme: (theme: ThemeMode) => void;
+  cycleTheme: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -35,7 +40,10 @@ export const Navbar: React.FC<NavbarProps> = ({
   isInstalled,
   onInstallClick,
   onOpenCreator,
-  isInstallHighlighted = false
+  isInstallHighlighted = false,
+  theme,
+  setTheme,
+  cycleTheme
 }) => {
   const navTabs: { id: ActiveTab; label: string; count?: number }[] = [
     { id: 'home', label: 'HOME' },
@@ -129,6 +137,13 @@ export const Navbar: React.FC<NavbarProps> = ({
               <span className="hidden lg:inline text-white">CREATOR</span>
             </motion.button>
           )}
+
+          {/* Theme Mode Selector (Default / Dark / Light) */}
+          <ThemeToggle
+            theme={theme}
+            setTheme={setTheme}
+            cycleTheme={cycleTheme}
+          />
 
           {/* Connection status badge */}
           {!isOnline && (

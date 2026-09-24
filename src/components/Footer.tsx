@@ -16,16 +16,16 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenCreator 
 }) => {
   return (
-    <footer className="relative bg-[#FF4D00] text-[#000000] border-t-2 border-[#000000] overflow-hidden select-none">
+    <footer className="relative theme-page-bg theme-page-text border-t-2 theme-border overflow-hidden select-none">
       
       {/* Giant CTA Section (Prompt Requirement) */}
-      <div className="py-20 sm:py-28 px-4 text-center max-w-7xl mx-auto border-b-2 border-[#000000]">
+      <div className="py-20 sm:py-28 px-4 text-center max-w-7xl mx-auto border-b-2 theme-border">
         
-        <div className="font-mono text-xs sm:text-sm font-bold uppercase tracking-widest mb-4">
+        <div className="font-mono text-xs sm:text-sm font-bold uppercase tracking-widest mb-4 theme-subtext">
           // ZERO SUBSCRIPTIONS // OPEN TO ALL HUMANS
         </div>
 
-        <h2 className="font-display text-[12vw] sm:text-[13vw] lg:text-[14vw] font-black leading-[0.82] tracking-[-0.05em] uppercase text-[#000000] mb-8 sm:mb-12">
+        <h2 className="font-display text-[12vw] sm:text-[13vw] lg:text-[14vw] font-black leading-[0.82] tracking-[-0.05em] uppercase theme-page-text mb-8 sm:mb-12">
           EXPLORE THE VAULT
         </h2>
 
@@ -77,7 +77,7 @@ export const Footer: React.FC<FooterProps> = ({
       </div>
 
       {/* Bottom Footer Info: Copyright & Space Mono (12px) horizontal links */}
-      <div className="bg-[#FF4D00] text-[#000000] py-8 px-4 sm:px-6 lg:px-8">
+      <div className="theme-page-bg theme-page-text py-8 px-4 sm:px-6 lg:px-8 border-t theme-border">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 font-mono text-[12px] font-bold tracking-tight">
           
           <div className="flex items-center gap-2">
@@ -89,7 +89,7 @@ export const Footer: React.FC<FooterProps> = ({
             {onOpenCreator && (
               <button
                 onClick={onOpenCreator}
-                className="hover:underline font-black text-black cursor-pointer"
+                className="hover:underline font-black theme-page-text cursor-pointer"
               >
                 [ CREATOR STORY ☕ ]
               </button>

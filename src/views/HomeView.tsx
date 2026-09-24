@@ -62,7 +62,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
   }, {} as Record<string, number>);
 
   return (
-    <div className="bg-[#FF4D00] text-[#000000] space-y-0 select-none">
+    <div className="theme-page-bg theme-page-text space-y-0 select-none">
       
       {/* 1. Typographic Hero Section */}
       <Hero

@@ -1,26 +1,64 @@
 @import "tailwindcss";
 
 @layer base {
-  :root {
+  :root, [data-theme="default"] {
     --brand-orange: #FF4D00;
     --brand-black: #000000;
     --brand-white: #FFFFFF;
     --font-display: 'Archivo Black', system-ui, -apple-system, sans-serif;
     --font-mono: 'Space Mono', ui-monospace, SFMono-Regular, monospace;
     --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+    
+    --theme-bg: #FF4D00;
+    --theme-text: #000000;
+    --theme-border: #000000;
+    --theme-subtext: #000000;
+    --theme-divider: #000000;
+    --theme-selection-bg: #000000;
+    --theme-selection-text: #FF4D00;
+    --theme-header-bg: #000000;
+    --theme-card-bg: #000000;
+    --theme-card-text: #FFFFFF;
+  }
+
+  [data-theme="dark"] {
+    --theme-bg: #08080C;
+    --theme-text: #FFFFFF;
+    --theme-border: #242434;
+    --theme-subtext: #A5A5B8;
+    --theme-divider: #242434;
+    --theme-selection-bg: #FF4D00;
+    --theme-selection-text: #000000;
+    --theme-header-bg: #0F0F16;
+    --theme-card-bg: #12121A;
+    --theme-card-text: #FFFFFF;
+  }
+
+  [data-theme="light"] {
+    --theme-bg: #F5F5F0;
+    --theme-text: #000000;
+    --theme-border: #000000;
+    --theme-subtext: #484848;
+    --theme-divider: #000000;
+    --theme-selection-bg: #000000;
+    --theme-selection-text: #FFFFFF;
+    --theme-header-bg: #000000;
+    --theme-card-bg: #FFFFFF;
+    --theme-card-text: #000000;
   }
 
   body {
     font-family: var(--font-body);
-    background-color: var(--brand-orange);
-    color: var(--brand-black);
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
     overflow-x: hidden;
     -webkit-tap-highlight-color: transparent;
+    transition: background-color 0.25s ease, color 0.25s ease;
   }
 
   ::selection {
-    background-color: #000000;
-    color: #FF4D00;
+    background-color: var(--theme-selection-bg);
+    color: var(--theme-selection-text);
   }
 
   /* High contrast scrollbars */
@@ -97,10 +135,10 @@
 
 /* Brutalist Hard Shadow & Hover Utility */
 .brutal-card {
-  background-color: #000000;
-  color: #FFFFFF;
-  border: 2px solid #000000;
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s;
+  background-color: var(--theme-card-bg);
+  color: var(--theme-card-text);
+  border: 2px solid var(--theme-border);
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s, border-color 0.2s;
 }
 
 .brutal-card:hover {
@@ -122,9 +160,10 @@
 
 /* Floating Navigation Pill */
 .nav-pill {
-  background-color: #000000;
-  border: 2px solid #000000;
+  background-color: var(--theme-header-bg);
+  border: 2px solid var(--theme-border);
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  transition: background-color 0.25s ease, border-color 0.25s ease;
 }
 
 /* Skew Section Utility */
@@ -148,4 +187,56 @@
 /* Mobile safe padding */
 .pb-safe {
   padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 5.5rem);
+}
+
+/* Theme Adaptive Styles */
+.theme-page-bg {
+  background-color: var(--theme-bg) !important;
+  transition: background-color 0.25s ease;
+}
+
+.theme-page-text {
+  color: var(--theme-text) !important;
+  transition: color 0.25s ease;
+}
+
+.theme-border {
+  border-color: var(--theme-border) !important;
+  transition: border-color 0.25s ease;
+}
+
+.theme-subtext {
+  color: var(--theme-subtext) !important;
+  transition: color 0.25s ease;
+}
+
+.theme-divider {
+  border-color: var(--theme-divider) !important;
+  transition: border-color 0.25s ease;
+}
+
+/* Dark mode specific text & border adaptations */
+[data-theme="dark"] .text-black,
+[data-theme="dark"] .text-\[\#000000\] {
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .border-black,
+[data-theme="dark"] .border-\[\#000000\] {
+  border-color: #242434 !important;
+}
+
+[data-theme="dark"] .bg-\[\#FF4D00\]:not(button):not(.keep-orange):not(.rounded-full):not(.w-10):not(.w-12):not(.w-14):not(.w-16):not(.w-9):not(.w-8) {
+  background-color: #08080C !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .shadow-\[5px_5px_0px_\#000000\] {
+  box-shadow: 5px 5px 0px #FF4D00 !important;
+}
+
+/* Light mode specific text & border adaptations */
+[data-theme="light"] .bg-\[\#FF4D00\]:not(button):not(.keep-orange):not(.rounded-full):not(.w-10):not(.w-12):not(.w-14):not(.w-16):not(.w-9):not(.w-8) {
+  background-color: #F5F5F0 !important;
+  color: #000000 !important;
 }

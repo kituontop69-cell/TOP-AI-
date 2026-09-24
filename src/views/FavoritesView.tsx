@@ -23,7 +23,7 @@ export const FavoritesView: React.FC<FavoritesViewProps> = ({
   const favoriteTools = tools.filter(t => favorites.includes(t.id));
 
   return (
-    <div className="bg-[#FF4D00] text-black min-h-screen pt-28 pb-20 select-none">
+    <div className="theme-page-bg theme-page-text min-h-screen pt-28 pb-20 select-none">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
         
         {/* Header */}

@@ -26,11 +26,11 @@ export const Hero: React.FC<HeroProps> = ({
   };
 
   return (
-    <section className="relative bg-[#FF4D00] text-[#000000] pt-24 sm:pt-32 pb-16 border-b-2 border-[#000000] overflow-hidden">
+    <section className="relative theme-page-bg theme-page-text pt-24 sm:pt-32 pb-16 border-b-2 theme-border overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
         {/* Top Technical Metadata Stamp */}
-        <div className="flex items-center justify-between font-mono text-[11px] font-bold uppercase tracking-wider mb-6 border-b-2 border-[#000000] pb-2">
+        <div className="flex items-center justify-between font-mono text-[11px] font-bold uppercase tracking-wider mb-6 border-b-2 theme-border pb-2">
           <span>SYSTEM // DISCOVERY ARCHIVE</span>
           <span className="hidden sm:inline">INDEX REVISION 2026.09</span>
           <span>EST. OPEN SOURCE</span>
@@ -38,26 +38,26 @@ export const Hero: React.FC<HeroProps> = ({
 
         {/* Main Giant Headline: 15vw - 16vw Archivo Black */}
         <div className="text-center my-4 sm:my-8 select-none">
-          <h1 className="font-display text-[15vw] sm:text-[14vw] md:text-[13vw] font-black leading-[0.84] tracking-[-0.05em] text-[#000000] uppercase break-words">
+          <h1 className="font-display text-[15vw] sm:text-[14vw] md:text-[13vw] font-black leading-[0.84] tracking-[-0.05em] uppercase break-words theme-page-text">
             AI VAULT
           </h1>
-          <p className="font-mono text-xs sm:text-sm md:text-base font-bold uppercase tracking-widest mt-3 text-black">
+          <p className="font-mono text-xs sm:text-sm md:text-base font-bold uppercase tracking-widest mt-3 theme-subtext">
             YOUR GATEWAY TO THE BEST FREE &amp; OPEN-ACCESS AI TOOLS
           </p>
         </div>
 
-        {/* 2px Solid Black Border Divider */}
-        <div className="border-t-2 border-[#000000] my-8 sm:my-10" />
+        {/* Solid Border Divider */}
+        <div className="border-t-2 theme-border my-8 sm:my-10" />
 
         {/* Metadata Row with Center 144px Rotating Scroll Indicator */}
         <div className="grid grid-cols-1 md:grid-cols-3 items-center gap-8 text-center md:text-left mb-10">
           
           {/* Left Metadata */}
           <div className="space-y-1">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider block theme-subtext">
               BASED IN // GLOBAL FREE ARCHIVE
             </span>
-            <p className="font-mono text-xs text-black/90 uppercase leading-relaxed max-w-xs mx-auto md:mx-0">
+            <p className="font-mono text-xs theme-subtext opacity-90 uppercase leading-relaxed max-w-xs mx-auto md:mx-0">
               Unrestricted access to cutting-edge chat, coding agents, image generators, and video synthesis.
             </p>
           </div>
@@ -69,10 +69,10 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Right Metadata */}
           <div className="space-y-1 md:text-right">
-            <span className="font-mono text-xs font-bold uppercase tracking-wider block text-black">
+            <span className="font-mono text-xs font-bold uppercase tracking-wider block theme-subtext">
               STATUS // {totalToolsCount}+ VERIFIED LISTINGS
             </span>
-            <p className="font-mono text-xs text-black/90 uppercase leading-relaxed max-w-xs mx-auto md:ml-auto md:mr-0">
+            <p className="font-mono text-xs theme-subtext opacity-90 uppercase leading-relaxed max-w-xs mx-auto md:ml-auto md:mr-0">
               100% Free tiers &amp; open credits. No paywall traps. Direct official links only.
             </p>
           </div>
