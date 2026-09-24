@@ -349,6 +349,8 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         favoritesCount={favorites.length}
+        theme={theme}
+        cycleTheme={cycleTheme}
       />
 
       {/* Modals */}

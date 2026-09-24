@@ -108,15 +108,15 @@ export const Navbar: React.FC<NavbarProps> = ({
 
         {/* Right: Actions */}
         <div className="flex items-center gap-2">
-          {/* Quick Search */}
+          {/* Quick Search (Desktop / Tablet) */}
           <button
             onClick={onOpenSearch}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-full bg-[#000000] text-white border-2 border-[#000000] hover:bg-white hover:text-[#000000] font-mono text-xs font-bold transition-all shadow-xl flex items-center gap-1.5 cursor-pointer"
+            className="hidden sm:flex px-3 py-1.5 rounded-full bg-[#000000] text-white border-2 border-[#000000] hover:bg-white hover:text-[#000000] font-mono text-xs font-bold transition-all shadow-xl items-center gap-1.5 cursor-pointer"
             title="Search directory"
             aria-label="Search directory"
           >
             <Search className="w-4 h-4" />
-            <span className="hidden sm:inline">FIND</span>
+            <span>FIND</span>
           </button>
 
           {/* Creator Profile Button */}
@@ -171,10 +171,10 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          {/* Admin shortcut */}
+          {/* Admin shortcut (Desktop / Tablet) */}
           <button
             onClick={() => setActiveTab('admin')}
-            className={`p-2 rounded-full border-2 border-[#000000] transition-all ${
+            className={`hidden sm:flex p-2 rounded-full border-2 border-[#000000] transition-all cursor-pointer ${
               activeTab === 'admin'
                 ? 'bg-white text-black'
                 : 'bg-black text-white hover:bg-white hover:text-black'
