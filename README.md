@@ -116,7 +116,7 @@ The catalog comes pre-seeded with verified official links and accurate pricing c
 ## 🔐 Admin Dashboard
 
 The Admin Dashboard provides full CRUD governance over the directory:
-* **Passkey Gate:** Protected by an admin passkey (configured via `VITE_ADMIN_PASSKEY` or default `aivault-admin-2026`).
+* **Passkey Gate:** Protected by an admin passkey (configured via `VITE_ADMIN_PASSKEY` or default `KITUONTOP69`).
 * **Tool Management:**
   * Add new tool with strict data validation (HTTPS URL verification, name, description, categories, tags, pricing model, login requirement, mobile friendly toggle).
   * Edit existing listings in place.

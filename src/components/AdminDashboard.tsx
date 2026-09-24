@@ -46,7 +46,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
   const [tagInput, setTagInput] = useState('');
   const [featureInput, setFeatureInput] = useState('');
 
-  const defaultPasskey = import.meta.env.VITE_ADMIN_PASSKEY || 'aivault-admin-2026';
+  const defaultPasskey = import.meta.env.VITE_ADMIN_PASSKEY || 'KITUONTOP69';
 
   useEffect(() => {
     const sessionAuth = sessionStorage.getItem('aivault_admin_auth');
@@ -63,7 +63,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (passkeyInput === defaultPasskey) {
+    if (passkeyInput.trim().toUpperCase() === defaultPasskey.toUpperCase()) {
       setIsAuthenticated(true);
       sessionStorage.setItem('aivault_admin_auth', 'true');
       setAuthError('');
@@ -285,9 +285,6 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
                 placeholder="PASSKEY..."
                 className="w-full bg-[#000000] text-white border-2 border-white focus:border-[#FF4D00] px-4 py-3 font-mono text-sm focus:outline-none uppercase"
               />
-              <span className="font-mono text-[10px] text-white/50 block mt-1.5 uppercase">
-                DEFAULT PASSKEY: <code className="text-[#FF4D00]">aivault-admin-2026</code>
-              </span>
             </div>
 
             {authError && (
