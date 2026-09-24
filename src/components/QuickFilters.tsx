@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 
 interface QuickFiltersProps {
   activeFilter: string;
@@ -24,14 +25,19 @@ export const QuickFilters: React.FC<QuickFiltersProps> = ({ activeFilter, onSele
           <button
             key={item.id}
             onClick={() => onSelect(item.id)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-full font-mono text-xs font-bold tracking-tight whitespace-nowrap transition-all duration-150 border-2 border-[#000000] cursor-pointer ${
-              isActive
-                ? 'bg-[#FFFFFF] text-[#000000] shadow-[3px_3px_0px_#000000] -translate-y-0.5'
-                : 'bg-[#000000] text-[#FFFFFF] hover:bg-[#FFFFFF] hover:text-[#000000]'
-            }`}
+            className="relative flex items-center gap-2 px-4 py-2 rounded-full font-mono text-xs font-bold tracking-tight whitespace-nowrap border-2 border-[#000000] cursor-pointer z-10 transition-colors select-none"
           >
+            {isActive ? (
+              <motion.div
+                layoutId="quickFilterPill"
+                className="absolute inset-0 bg-[#FFFFFF] rounded-full -z-10 shadow-[3px_3px_0px_#000000]"
+                transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+              />
+            ) : (
+              <div className="absolute inset-0 bg-[#000000] rounded-full -z-20" />
+            )}
             <span className="text-[#FF4D00]">[{item.code}]</span>
-            <span>{item.label}</span>
+            <span className={isActive ? 'text-[#000000]' : 'text-[#FFFFFF]'}>{item.label}</span>
           </button>
         );
       })}

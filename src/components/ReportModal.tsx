@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import type { AITool, ReportItem } from '../types';
 import { toolStorage } from '../services/toolStorage';
 import { analytics } from '../services/analytics';
@@ -17,11 +18,9 @@ export const ReportModal: React.FC<ReportModalProps> = ({ tool, isOpen, onClose 
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  if (!isOpen || !tool) return null;
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!details.trim()) return;
+    if (!tool || !details.trim()) return;
 
     setIsSubmitting(true);
     try {
@@ -50,13 +49,24 @@ export const ReportModal: React.FC<ReportModalProps> = ({ tool, isOpen, onClose 
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
-      <div 
-        onClick={onClose}
-        className="fixed inset-0 bg-black/85 backdrop-blur-sm transition-opacity" 
-      />
+    <AnimatePresence>
+      {isOpen && tool && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/85 backdrop-blur-sm" 
+          />
 
-      <div className="relative w-full max-w-lg bg-[#000000] text-white border-2 border-white shadow-[8px_8px_0px_#FF4D00] p-6 sm:p-7 z-10 select-none">
+          <motion.div 
+            initial={{ scale: 0.94, opacity: 0, y: 16 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 12 }}
+            transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+            className="relative w-full max-w-lg bg-[#000000] text-white border-2 border-white shadow-[8px_8px_0px_#FF4D00] p-6 sm:p-7 z-10 select-none"
+          >
         
         {/* Close Button */}
         <button
@@ -165,7 +175,9 @@ export const ReportModal: React.FC<ReportModalProps> = ({ tool, isOpen, onClose 
           </form>
         )}
 
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };

@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion, useMotionValue, useMotionTemplate } from 'motion/react';
 import type { CategoryInfo } from '../types';
 import { ArrowUpRight } from 'lucide-react';
 
@@ -19,16 +20,38 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
 }) => {
   const formattedIndex = (index + 1).toString().padStart(2, '0');
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  function handleMouseMove({ currentTarget, clientX, clientY }: React.MouseEvent) {
+    const { left, top } = currentTarget.getBoundingClientRect();
+    mouseX.set(clientX - left);
+    mouseY.set(clientY - top);
+  }
+
+  const spotlightBg = useMotionTemplate`radial-gradient(280px circle at ${mouseX}px ${mouseY}px, ${
+    isSelected ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 77, 0, 0.22)'
+  }, transparent 80%)`;
+
   return (
-    <div
+    <motion.div
       onClick={() => onSelect(category.id)}
-      className={`group relative p-6 cursor-pointer border-2 transition-all duration-200 flex flex-col justify-between select-none ${
+      onMouseMove={handleMouseMove}
+      whileHover={{ y: -5, transition: { type: 'spring', stiffness: 450, damping: 25 } }}
+      whileTap={{ scale: 0.98 }}
+      className={`group relative p-6 cursor-pointer border-2 overflow-hidden flex flex-col justify-between select-none ${
         isSelected
-          ? 'bg-[#FF4D00] text-[#000000] border-[#000000] shadow-[6px_6px_0px_#000000]'
-          : 'bg-[#000000] text-[#FFFFFF] border-[#000000] hover:border-[#FF4D00] hover:shadow-[6px_6px_0px_#FF4D00]'
-      } hover:-translate-x-1 hover:-translate-y-1`}
+          ? 'bg-[#FF4D00] text-[#000000] border-[#000000] shadow-[5px_5px_0px_#000000] hover:shadow-[8px_8px_0px_#000000]'
+          : 'bg-[#000000] text-[#FFFFFF] border-[#000000] hover:border-[#FF4D00] shadow-[5px_5px_0px_#000000] hover:shadow-[8px_8px_0px_#FF4D00]'
+      } transition-colors duration-200`}
     >
-      <div>
+      {/* 21st.dev Spotlight */}
+      <motion.div
+        className="pointer-events-none absolute -inset-px opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+        style={{ background: spotlightBg }}
+      />
+
+      <div className="relative z-10">
         <div className="flex items-center justify-between gap-3 mb-4">
           <span className="font-mono text-sm font-bold text-[#FF4D00] group-hover:text-current">
             [{formattedIndex}]
@@ -48,10 +71,10 @@ export const CategoryCard: React.FC<CategoryCardProps> = ({
         </p>
       </div>
 
-      <div className="mt-6 pt-4 border-t border-white/20 flex items-center justify-between font-mono text-xs font-bold uppercase">
+      <div className="relative z-10 mt-6 pt-4 border-t border-white/20 flex items-center justify-between font-mono text-xs font-bold uppercase">
         <span>ACCESS DOMAIN</span>
         <ArrowUpRight className="w-4 h-4 transform group-hover:rotate-45 group-hover:text-[#FF4D00] transition-transform" />
       </div>
-    </div>
+    </motion.div>
   );
 };

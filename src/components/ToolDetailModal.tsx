@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'motion/react';
 import type { AITool } from '../types';
 import { getPricingConfig } from '../utils/pricing';
 import { CATEGORIES } from '../data/categories';
@@ -42,21 +43,21 @@ export const ToolDetailModal: React.FC<ToolDetailModalProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
 
-  if (!isOpen || !tool) return null;
+  const pricing = tool ? getPricingConfig(tool.pricingType) : null;
 
-  const pricing = getPricingConfig(tool.pricingType);
-
-  const categoryNames = tool.category.map(catId => {
+  const categoryNames = tool ? tool.category.map(catId => {
     const found = CATEGORIES.find(c => c.id === catId || c.slug === catId);
     return found ? found.name : catId;
-  });
+  }) : [];
 
   const handleLaunch = () => {
+    if (!tool) return;
     onLaunch(tool);
     window.open(tool.url, '_blank', 'noopener,noreferrer');
   };
 
   const handleShare = async () => {
+    if (!tool) return;
     const shareData = {
       title: `${tool.name} — AI VAULT`,
       text: `${tool.name}: ${tool.description}`,
@@ -77,6 +78,7 @@ export const ToolDetailModal: React.FC<ToolDetailModalProps> = ({
   };
 
   const handleToggleFav = () => {
+    if (!tool) return;
     const next = !isFavorite;
     onToggleFavorite(tool.id);
     if (next) {
@@ -91,15 +93,26 @@ export const ToolDetailModal: React.FC<ToolDetailModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
-      {/* Backdrop */}
-      <div 
-        onClick={onClose}
-        className="fixed inset-0 bg-black/85 backdrop-blur-sm transition-opacity" 
-      />
+    <AnimatePresence>
+      {isOpen && tool && pricing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+          {/* Backdrop */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/85 backdrop-blur-sm" 
+          />
 
-      {/* Modal Dialog */}
-      <div className="relative w-full max-w-2xl bg-[#000000] text-white border-2 border-white shadow-[10px_10px_0px_#FF4D00] p-6 sm:p-8 z-10 my-8">
+          {/* Modal Dialog */}
+          <motion.div 
+            initial={{ scale: 0.94, opacity: 0, y: 16 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 12 }}
+            transition={{ type: 'spring', stiffness: 450, damping: 30 }}
+            className="relative w-full max-w-2xl bg-[#000000] text-white border-2 border-white shadow-[10px_10px_0px_#FF4D00] p-6 sm:p-8 z-10 my-8"
+          >
         
         {/* Close Button */}
         <button
@@ -265,7 +278,9 @@ export const ToolDetailModal: React.FC<ToolDetailModalProps> = ({
           </div>
         </div>
 
-      </div>
-    </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
   );
 };

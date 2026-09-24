@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'motion/react';
 import type { ActiveTab } from '../types';
 import { 
   Search, 
@@ -31,14 +32,25 @@ export const Navbar: React.FC<NavbarProps> = ({
   isInstalled,
   onInstallClick
 }) => {
+  const navTabs: { id: ActiveTab; label: string; count?: number }[] = [
+    { id: 'home', label: 'HOME' },
+    { id: 'explore', label: 'EXPLORE' },
+    { id: 'categories', label: 'CATEGORIES' },
+    { id: 'trending', label: 'TRENDING' },
+    { id: 'new', label: 'NEW' },
+    { id: 'favorites', label: 'FAVORITES', count: favoritesCount }
+  ];
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8 pt-4 pb-2 select-none pointer-events-none">
       <div className="max-w-7xl mx-auto flex items-center justify-between pointer-events-auto">
         
         {/* Left: Brand Logo */}
-        <div 
+        <motion.div 
           onClick={() => setActiveTab('home')}
-          className="flex items-center gap-2 cursor-pointer group bg-[#000000] text-white px-3.5 py-1.5 rounded-full border-2 border-[#000000] shadow-xl hover:bg-white hover:text-[#000000] transition-all"
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          className="flex items-center gap-2 cursor-pointer group bg-[#000000] text-white px-3.5 py-1.5 rounded-full border-2 border-[#000000] shadow-xl hover:bg-white hover:text-[#000000] transition-colors"
         >
           <div className="w-5 h-5 rounded-full bg-[#FF4D00] flex items-center justify-center text-black font-black text-xs">
             <Zap className="w-3 h-3 fill-black text-black" />
@@ -49,80 +61,36 @@ export const Navbar: React.FC<NavbarProps> = ({
           <span className="font-mono text-[10px] text-[#FF4D00] group-hover:text-black font-bold">
             [FREE]
           </span>
-        </div>
+        </motion.div>
 
-        {/* Center: Floating Black Pill Navigation (Prompt Requirement) */}
+        {/* Center: 21st.dev Style Floating Black Pill Dock Navigation */}
         <nav className="hidden md:flex items-center gap-1 bg-[#000000] border-2 border-[#000000] rounded-full p-1.5 shadow-2xl">
-          <button
-            onClick={() => setActiveTab('home')}
-            className={`px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-all ${
-              activeTab === 'home'
-                ? 'bg-white text-[#000000]'
-                : 'text-white hover:bg-white hover:text-[#000000]'
-            }`}
-          >
-            HOME
-          </button>
-
-          <button
-            onClick={() => setActiveTab('explore')}
-            className={`px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-all ${
-              activeTab === 'explore'
-                ? 'bg-white text-[#000000]'
-                : 'text-white hover:bg-white hover:text-[#000000]'
-            }`}
-          >
-            EXPLORE
-          </button>
-
-          <button
-            onClick={() => setActiveTab('categories')}
-            className={`px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-all ${
-              activeTab === 'categories'
-                ? 'bg-white text-[#000000]'
-                : 'text-white hover:bg-white hover:text-[#000000]'
-            }`}
-          >
-            CATEGORIES
-          </button>
-
-          <button
-            onClick={() => setActiveTab('trending')}
-            className={`px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-all ${
-              activeTab === 'trending'
-                ? 'bg-white text-[#000000]'
-                : 'text-white hover:bg-white hover:text-[#000000]'
-            }`}
-          >
-            TRENDING
-          </button>
-
-          <button
-            onClick={() => setActiveTab('new')}
-            className={`px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-all ${
-              activeTab === 'new'
-                ? 'bg-white text-[#000000]'
-                : 'text-white hover:bg-white hover:text-[#000000]'
-            }`}
-          >
-            NEW
-          </button>
-
-          <button
-            onClick={() => setActiveTab('favorites')}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-all ${
-              activeTab === 'favorites'
-                ? 'bg-white text-[#000000]'
-                : 'text-white hover:bg-white hover:text-[#000000]'
-            }`}
-          >
-            <span>FAVORITES</span>
-            {favoritesCount > 0 && (
-              <span className="text-[#FF4D00] font-black">
-                [{favoritesCount}]
-              </span>
-            )}
-          </button>
+          {navTabs.map(tab => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className="relative px-3.5 py-1.5 rounded-full font-mono text-[12px] font-bold tracking-tight transition-colors z-10 select-none cursor-pointer"
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="navbar-dock-indicator"
+                    className="absolute inset-0 bg-white rounded-full -z-10 shadow-[2px_2px_0px_#000000]"
+                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                  />
+                )}
+                <span className={`flex items-center gap-1 ${isActive ? 'text-[#000000]' : 'text-white hover:text-white/80'}`}>
+                  {tab.label}
+                  {tab.count !== undefined && tab.count > 0 && (
+                    <span className="text-[#FF4D00] font-black">
+                      [{tab.count}]
+                    </span>
+                  )}
+                </span>
+              </button>
+            );
+          })}
         </nav>
 
         {/* Right: Actions */}
