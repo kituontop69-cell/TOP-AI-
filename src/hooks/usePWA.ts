@@ -71,6 +71,34 @@ export function usePWA() {
 
     window.addEventListener('appinstalled', handleAppInstalled);
 
+    // 6. Proactive Service Worker cache invalidation & auto-update check
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(registrations => {
+        for (const reg of registrations) {
+          reg.update();
+        }
+      });
+
+      let hasRefreshed = false;
+      const handleControllerChange = () => {
+        if (!hasRefreshed) {
+          hasRefreshed = true;
+          window.location.reload();
+        }
+      };
+
+      navigator.serviceWorker.addEventListener('controllerchange', handleControllerChange);
+
+      return () => {
+        mediaQuery.removeEventListener('change', checkInstalled);
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+        window.removeEventListener('online', handleOnline);
+        window.removeEventListener('offline', handleOffline);
+        window.removeEventListener('appinstalled', handleAppInstalled);
+        navigator.serviceWorker.removeEventListener('controllerchange', handleControllerChange);
+      };
+    }
+
     return () => {
       mediaQuery.removeEventListener('change', checkInstalled);
       window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
