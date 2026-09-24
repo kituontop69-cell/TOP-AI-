@@ -119,7 +119,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               title="About the Creator (Kaushik Boruah)"
               aria-label="Creator Profile"
             >
-              <Coffee className="w-4 h-4 text-[#FFDD00]" />
+              <img
+                src="/creator-profile.png"
+                alt="Kaushik"
+                className="w-4 h-4 rounded-full object-cover border border-[#FF4D00]"
+              />
               <span className="hidden lg:inline text-white">CREATOR</span>
             </motion.button>
           )}

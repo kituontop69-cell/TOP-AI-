@@ -106,10 +106,12 @@ export const CreatorModal: React.FC<CreatorModalProps> = ({ isOpen, onClose }) =
 
             {/* Profile Intro Banner */}
             <div className="flex items-start gap-4 sm:gap-5 mb-6 pb-6 border-b border-white/20">
-              <div className="relative">
-                <div className="w-16 h-16 sm:w-20 sm:h-20 bg-[#FF4D00] text-black border-2 border-white flex items-center justify-center font-display text-2xl sm:text-3xl tracking-tight shadow-[4px_4px_0px_#FFFFFF] flex-shrink-0">
-                  KB
-                </div>
+              <div className="relative flex-shrink-0">
+                <img
+                  src="/creator-profile.png"
+                  alt="Kaushik Boruah (@codexkitu)"
+                  className="w-16 h-16 sm:w-20 sm:h-20 object-cover border-2 border-white shadow-[4px_4px_0px_#FFFFFF]"
+                />
                 <div className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-black border-2 border-white flex items-center justify-center text-[#FF4D00]">
                   <Zap className="w-3.5 h-3.5 fill-[#FF4D00]" />
                 </div>
