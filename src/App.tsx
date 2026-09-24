@@ -15,6 +15,7 @@ import { OfflineBanner } from './components/OfflineBanner';
 import { AdminDashboard } from './components/AdminDashboard';
 import { CreatorModal } from './components/CreatorModal';
 import { CinematicPreloader, PRELOADER_CONFIG } from './components/CinematicPreloader';
+import { PWAInstallHint } from './components/PWAInstallHint';
 
 // Views
 import { HomeView } from './views/HomeView';
@@ -82,8 +83,20 @@ export function App() {
     isOnline,
     showIOSGuide,
     setShowIOSGuide,
+    showInstallHint,
+    triggerInstallHint,
+    dismissInstallHint,
     promptInstall
   } = usePWA();
+
+  // Trigger First-time PWA Installation Guidance Arrow once preloader & creator modal are clear
+  useEffect(() => {
+    if (isLoadingPreloader || showCreatorModal) return;
+    const hintTimer = setTimeout(() => {
+      triggerInstallHint();
+    }, 600);
+    return () => clearTimeout(hintTimer);
+  }, [isLoadingPreloader, showCreatorModal, triggerInstallHint]);
 
   // Sync tools & state on custom storage event
   const refreshStorage = useCallback(() => {
@@ -234,6 +247,7 @@ export function App() {
         isInstalled={isInstalled}
         onInstallClick={promptInstall}
         onOpenCreator={() => setShowCreatorModal(true)}
+        isInstallHighlighted={showInstallHint && !isInstalled}
       />
 
       {/* View router */}
@@ -357,6 +371,15 @@ export function App() {
         isOpen={showCreatorModal}
         onClose={() => setShowCreatorModal(false)}
       />
+
+      {/* PWA First-time Installation Guidance Pointer */}
+      {showInstallHint && !isInstalled && (
+        <PWAInstallHint
+          isIOS={isIOS}
+          onInstallClick={promptInstall}
+          onDismiss={dismissInstallHint}
+        />
+      )}
 
     </div>
   );

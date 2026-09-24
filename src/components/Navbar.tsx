@@ -23,6 +23,7 @@ interface NavbarProps {
   isInstalled: boolean;
   onInstallClick: () => void;
   onOpenCreator?: () => void;
+  isInstallHighlighted?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -33,7 +34,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   isOnline,
   isInstalled,
   onInstallClick,
-  onOpenCreator
+  onOpenCreator,
+  isInstallHighlighted = false
 }) => {
   const navTabs: { id: ActiveTab; label: string; count?: number }[] = [
     { id: 'home', label: 'HOME' },
@@ -139,8 +141,15 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Install PWA Button */}
           {!isInstalled && (
             <button
+              id="pwa-header-install-btn"
               onClick={onInstallClick}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FFFFFF] text-[#000000] border-2 border-[#000000] hover:bg-[#000000] hover:text-[#FFFFFF] rounded-full font-mono text-xs font-bold shadow-xl active:scale-95 transition-all"
+              className={`relative flex items-center gap-1.5 px-3.5 py-1.5 bg-[#FFFFFF] text-[#000000] border-2 border-[#000000] hover:bg-[#000000] hover:text-[#FFFFFF] rounded-full font-mono text-xs font-bold shadow-xl active:scale-95 transition-all cursor-pointer ${
+                isInstallHighlighted
+                  ? 'ring-4 ring-black ring-offset-2 ring-offset-[#FF4D00] shadow-[0_0_20px_#000000]'
+                  : ''
+              }`}
+              title="Install native application"
+              aria-label="Install native application"
             >
               <Download className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">GET APP</span>

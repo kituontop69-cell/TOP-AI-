@@ -1,0 +1,79 @@
+/* =====================================================================
+   AI VAULT — PWA INSTALLATION GUIDANCE POINTER STYLES
+   Minimal, futuristic, neo-brutalist directional onboarding animation
+   ===================================================================== */
+
+.pwa-hint-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 45;
+  overflow: hidden;
+}
+
+/* Floating bounce animation directed towards the top-right install button */
+.pwa-hint-container {
+  position: absolute;
+  pointer-events: auto;
+  animation: pwaHintFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.pwa-hint-animated-arrow {
+  animation: pwaPointerBounce 1.8s ease-in-out infinite;
+  will-change: transform;
+}
+
+@keyframes pwaHintFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pwaPointerBounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+/* High-contrast neo-brutalist tooltip card */
+.pwa-hint-card {
+  background-color: #000000;
+  color: #ffffff;
+  border: 2px solid #000000;
+  box-shadow: 4px 4px 0px #ffffff, 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pwa-hint-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px #ffffff, 0 12px 30px -5px rgba(0, 0, 0, 0.6);
+}
+
+.pwa-hint-card:active {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 0px #ffffff;
+}
+
+/* Subtle glow pulse on the pointer tip */
+.pwa-arrow-head {
+  filter: drop-shadow(0 0 6px rgba(255, 77, 0, 0.8));
+}
+
+/* Respect prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .pwa-hint-container,
+  .pwa-hint-animated-arrow {
+    animation: none !important;
+  }
+}
