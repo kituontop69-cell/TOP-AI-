@@ -34,6 +34,7 @@ interface HomeViewProps {
   onViewAll: () => void;
   isInstalled: boolean;
   onInstallClick: () => void;
+  onOpenAdminLogin?: () => void;
 }
 
 export const HomeView: React.FC<HomeViewProps> = ({
@@ -49,7 +50,8 @@ export const HomeView: React.FC<HomeViewProps> = ({
   onSelectTool,
   onOpenTool,
   onSelectCategory,
-  onViewAll
+  onViewAll,
+  onOpenAdminLogin
 }) => {
   const trendingTools = tools.filter(t => t.trending).slice(0, 6);
   const freeNoLoginTools = tools.filter(t => !t.requiresLogin && (t.pricingType === 'free' || t.pricingType === 'open-source')).slice(0, 6);
@@ -71,6 +73,7 @@ export const HomeView: React.FC<HomeViewProps> = ({
         activeQuickFilter={activeQuickFilter}
         onSelectQuickFilter={onSelectQuickFilter}
         totalToolsCount={tools.length}
+        onOpenAdminLogin={onOpenAdminLogin}
       />
 
       {/* 2. Skewed Infinite Marquee Section (-2deg, 2 Rows) */}

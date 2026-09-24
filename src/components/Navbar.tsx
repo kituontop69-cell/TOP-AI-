@@ -29,6 +29,7 @@ interface NavbarProps {
   theme: ThemeMode;
   setTheme: (theme: ThemeMode) => void;
   cycleTheme: () => void;
+  isAdmin?: boolean;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -43,15 +44,16 @@ export const Navbar: React.FC<NavbarProps> = ({
   isInstallHighlighted = false,
   theme,
   setTheme,
-  cycleTheme
+  cycleTheme,
+  isAdmin = false
 }) => {
   const navTabs: { id: ActiveTab; label: string; count?: number }[] = [
     { id: 'home', label: 'HOME' },
-    { id: 'explore', label: 'EXPLORE' },
-    { id: 'categories', label: 'CATEGORIES' },
-    { id: 'trending', label: 'TRENDING' },
-    { id: 'new', label: 'NEW' },
-    { id: 'favorites', label: 'FAVORITES', count: favoritesCount }
+    { id: 'explore', label: 'FIND' },
+    { id: 'categories', label: 'CATS' },
+    { id: 'favorites', label: 'FAVS', count: favoritesCount },
+    { id: 'modes', label: 'MODES' },
+    ...(isAdmin ? [{ id: 'admin' as ActiveTab, label: 'ADMIN' }] : [])
   ];
 
   return (
@@ -171,19 +173,21 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          {/* Admin shortcut (Desktop / Tablet) */}
-          <button
-            onClick={() => setActiveTab('admin')}
-            className={`hidden sm:flex p-2 rounded-full border-2 border-[#000000] transition-all cursor-pointer ${
-              activeTab === 'admin'
-                ? 'bg-white text-black'
-                : 'bg-black text-white hover:bg-white hover:text-black'
-            }`}
-            title="Admin Portal"
-            aria-label="Admin Portal"
-          >
-            <ShieldCheck className="w-4 h-4" />
-          </button>
+          {/* Authenticated Admin shortcut (Desktop / Tablet only when verified) */}
+          {isAdmin && (
+            <button
+              onClick={() => setActiveTab('admin')}
+              className={`hidden sm:flex p-2 rounded-full border-2 border-[#000000] transition-all cursor-pointer ${
+                activeTab === 'admin'
+                  ? 'bg-white text-black'
+                  : 'bg-black text-white hover:bg-white hover:text-black'
+              }`}
+              title="Admin Portal"
+              aria-label="Admin Portal"
+            >
+              <ShieldCheck className="w-4 h-4 text-[#FF4D00]" />
+            </button>
+          )}
         </div>
 
       </div>

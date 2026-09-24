@@ -7,13 +7,15 @@ interface FooterProps {
   onInstallClick: () => void;
   isInstalled: boolean;
   onOpenCreator?: () => void;
+  isAdmin?: boolean;
 }
 
 export const Footer: React.FC<FooterProps> = ({ 
   setActiveTab, 
   onInstallClick, 
   isInstalled,
-  onOpenCreator 
+  onOpenCreator,
+  isAdmin = false
 }) => {
   return (
     <footer className="relative theme-page-bg theme-page-text border-t-2 theme-border overflow-hidden select-none">
@@ -101,7 +103,7 @@ export const Footer: React.FC<FooterProps> = ({
               }}
               className="hover:underline cursor-pointer"
             >
-              [ EXPLORE ]
+              [ FIND ]
             </button>
             <button
               onClick={() => {
@@ -110,7 +112,16 @@ export const Footer: React.FC<FooterProps> = ({
               }}
               className="hover:underline cursor-pointer"
             >
-              [ CATEGORIES ]
+              [ CATS ]
+            </button>
+            <button
+              onClick={() => {
+                setActiveTab('modes');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="hover:underline text-[#FF4D00] font-black cursor-pointer"
+            >
+              [ MODES ]
             </button>
             <button
               onClick={() => {
@@ -121,15 +132,17 @@ export const Footer: React.FC<FooterProps> = ({
             >
               [ TRENDING ]
             </button>
-            <button
-              onClick={() => {
-                setActiveTab('admin');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              className="hover:underline cursor-pointer"
-            >
-              [ ADMIN PORTAL ]
-            </button>
+            {isAdmin && (
+              <button
+                onClick={() => {
+                  setActiveTab('admin');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="hover:underline text-red-500 font-bold cursor-pointer"
+              >
+                [ ADMIN PORTAL ]
+              </button>
+            )}
           </div>
 
         </div>

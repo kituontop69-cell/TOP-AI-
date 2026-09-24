@@ -4,6 +4,8 @@ import { ToolCard } from '../components/ToolCard';
 import { FilterBar } from '../components/FilterBar';
 import { QuickFilters } from '../components/QuickFilters';
 import { Search, RotateCcw } from 'lucide-react';
+import { AdminTriggerEntry } from '../components/AdminTriggerEntry';
+import { isSecretAdminTrigger } from '../services/adminTrigger';
 
 interface ExploreViewProps {
   tools: AITool[];
@@ -13,6 +15,7 @@ interface ExploreViewProps {
   onToggleFavorite: (id: string) => void;
   onSelectTool: (tool: AITool) => void;
   onOpenTool: (tool: AITool) => void;
+  onOpenAdminLogin?: () => void;
 }
 
 export const ExploreView: React.FC<ExploreViewProps> = ({
@@ -22,10 +25,21 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
   favorites,
   onToggleFavorite,
   onSelectTool,
-  onOpenTool
+  onOpenTool,
+  onOpenAdminLogin
 }) => {
+  const isTriggerActive = isSecretAdminTrigger(filters.searchQuery);
+
+  const handleAdminActivate = () => {
+    setFilters(prev => ({ ...prev, searchQuery: '' }));
+    if (onOpenAdminLogin) {
+      onOpenAdminLogin();
+    }
+  };
+
   const filteredTools = tools.filter(tool => {
-    if (filters.searchQuery.trim()) {
+    // If exact secret trigger is entered, do NOT filter public tools with it
+    if (filters.searchQuery.trim() && !isTriggerActive) {
       const q = filters.searchQuery.toLowerCase().trim();
       const nameMatch = tool.name.toLowerCase().includes(q);
       const descMatch = tool.description.toLowerCase().includes(q) || (tool.longDescription && tool.longDescription.toLowerCase().includes(q));
@@ -118,10 +132,29 @@ export const ExploreView: React.FC<ExploreViewProps> = ({
                 type="text"
                 value={filters.searchQuery}
                 onChange={e => setFilters(prev => ({ ...prev, searchQuery: e.target.value }))}
+                onKeyDown={e => {
+                  if (e.key === 'Enter' && isTriggerActive) {
+                    e.preventDefault();
+                    handleAdminActivate();
+                  }
+                }}
                 placeholder="FILTER QUERY..."
                 className="w-full bg-transparent font-mono text-xs font-bold uppercase text-black focus:outline-none placeholder-black/40"
               />
+              {filters.searchQuery && (
+                <button
+                  onClick={() => setFilters(prev => ({ ...prev, searchQuery: '' }))}
+                  className="font-mono text-[10px] text-black font-black uppercase ml-1.5 cursor-pointer"
+                >
+                  CLEAR
+                </button>
+              )}
             </div>
+
+            {/* Discreet Admin Trigger Entry */}
+            {isTriggerActive && (
+              <AdminTriggerEntry onActivate={handleAdminActivate} />
+            )}
           </div>
         </div>
 

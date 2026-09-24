@@ -1,4 +1,4 @@
-import { AITool } from '../types';
+import { AITool } from '../types/index';
 
 export const INITIAL_TOOLS: AITool[] = [
   {

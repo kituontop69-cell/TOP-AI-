@@ -2,6 +2,8 @@ import React from 'react';
 import { Search, ArrowRight, CornerDownRight } from 'lucide-react';
 import { RotatingScrollIndicator } from './RotatingScrollIndicator';
 import { QuickFilters } from './QuickFilters';
+import { AdminTriggerEntry } from './AdminTriggerEntry';
+import { isSecretAdminTrigger } from '../services/adminTrigger';
 
 interface HeroProps {
   searchQuery: string;
@@ -9,6 +11,7 @@ interface HeroProps {
   activeQuickFilter: string;
   onSelectQuickFilter: (filter: any) => void;
   totalToolsCount: number;
+  onOpenAdminLogin?: () => void;
 }
 
 export const Hero: React.FC<HeroProps> = ({
@@ -16,8 +19,26 @@ export const Hero: React.FC<HeroProps> = ({
   setSearchQuery,
   activeQuickFilter,
   onSelectQuickFilter,
-  totalToolsCount
+  totalToolsCount,
+  onOpenAdminLogin
 }) => {
+  const isTriggerActive = isSecretAdminTrigger(searchQuery);
+
+  const handleAdminActivate = () => {
+    setSearchQuery('');
+    if (onOpenAdminLogin) {
+      onOpenAdminLogin();
+    }
+  };
+
+  const handleDiscoverClick = () => {
+    if (isTriggerActive) {
+      handleAdminActivate();
+      return;
+    }
+    scrollToExplore();
+  };
+
   const scrollToExplore = () => {
     const el = document.getElementById('directory-content');
     if (el) {
@@ -88,13 +109,23 @@ export const Hero: React.FC<HeroProps> = ({
                 type="text"
                 value={searchQuery}
                 onChange={e => setSearchQuery(e.target.value)}
+                onKeyDown={e => {
+                  if (e.key === 'Enter') {
+                    if (isTriggerActive) {
+                      e.preventDefault();
+                      handleAdminActivate();
+                    } else {
+                      scrollToExplore();
+                    }
+                  }
+                }}
                 placeholder="SEARCH ARCHIVE (E.G. 'CODING', 'KLING', 'VIDEO', 'PERPLEXITY')..."
                 className="w-full bg-transparent text-[#000000] placeholder-black/50 font-mono text-xs sm:text-sm font-bold uppercase focus:outline-none"
               />
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery('')}
-                  className="font-mono text-xs font-bold uppercase bg-black text-white px-2 py-1 rounded"
+                  className="font-mono text-xs font-bold uppercase bg-black text-white px-2 py-1 rounded cursor-pointer"
                 >
                   CLEAR
                 </button>
@@ -102,13 +133,18 @@ export const Hero: React.FC<HeroProps> = ({
             </div>
 
             <button
-              onClick={scrollToExplore}
-              className="bg-[#000000] text-white hover:bg-[#FF4D00] hover:text-black font-display text-sm tracking-tight px-6 py-3.5 border-t-2 sm:border-t-0 sm:border-l-2 border-[#000000] flex items-center justify-center gap-2 transition-colors duration-150 uppercase"
+              onClick={handleDiscoverClick}
+              className="bg-[#000000] text-white hover:bg-[#FF4D00] hover:text-black font-display text-sm tracking-tight px-6 py-3.5 border-t-2 sm:border-t-0 sm:border-l-2 border-[#000000] flex items-center justify-center gap-2 transition-colors duration-150 uppercase cursor-pointer"
             >
-              <span>DISCOVER</span>
+              <span>{isTriggerActive ? 'ACCESS' : 'DISCOVER'}</span>
               <ArrowRight className="w-4 h-4" />
             </button>
           </div>
+
+          {/* Discreet Admin Trigger Entry */}
+          {isTriggerActive && (
+            <AdminTriggerEntry onActivate={handleAdminActivate} />
+          )}
         </div>
 
         {/* Quick Filter Pills */}

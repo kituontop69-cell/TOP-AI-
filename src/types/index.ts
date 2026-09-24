@@ -31,6 +31,33 @@ export interface AITool {
   clicks?: number;
   keyFeatures?: string[];
   developerOrCompany?: string;
+  modes?: string[];
+}
+
+export type ModeId = 
+  | 'study'
+  | 'coding'
+  | 'design'
+  | 'image'
+  | 'video'
+  | 'voice'
+  | 'music'
+  | 'writing'
+  | 'research'
+  | 'productivity'
+  | '3d'
+  | 'language';
+
+export interface ModeInfo {
+  id: ModeId;
+  label: string;
+  emoji: string;
+  iconName: string;
+  tagline: string;
+  description: string;
+  intents: string[];
+  matchingCategories: string[];
+  keywords: string[];
 }
 
 export interface CategoryInfo {
@@ -66,4 +93,4 @@ export interface FilterState {
   sortBy: SortOption;
 }
 
-export type ActiveTab = 'home' | 'explore' | 'categories' | 'trending' | 'new' | 'favorites' | 'admin';
+export type ActiveTab = 'home' | 'explore' | 'categories' | 'trending' | 'new' | 'favorites' | 'modes' | 'admin';

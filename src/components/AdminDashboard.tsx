@@ -26,9 +26,17 @@ import {
 
 interface AdminDashboardProps {
   onBackToHome: () => void;
+  onLogout?: () => void;
+  onAuthenticated?: () => void;
+  isUnlockedGate?: boolean;
 }
 
-export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) => {
+export const AdminDashboard: React.FC<AdminDashboardProps> = ({ 
+  onBackToHome,
+  onLogout,
+  onAuthenticated,
+  isUnlockedGate = false
+}) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [passkeyInput, setPasskeyInput] = useState('');
   const [authError, setAuthError] = useState('');
@@ -53,8 +61,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
     if (sessionAuth === 'true') {
       setIsAuthenticated(true);
       loadData();
+      if (onAuthenticated) onAuthenticated();
     }
-  }, []);
+  }, [onAuthenticated]);
 
   const loadData = () => {
     setTools(toolStorage.getAllTools());
@@ -68,6 +77,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
       sessionStorage.setItem('aivault_admin_auth', 'true');
       setAuthError('');
       loadData();
+      if (onAuthenticated) onAuthenticated();
     } else {
       setAuthError('AUTHENTICATION FAILED: INVALID PASSKEY');
     }
@@ -77,6 +87,8 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
     setIsAuthenticated(false);
     sessionStorage.removeItem('aivault_admin_auth');
     setPasskeyInput('');
+    if (onLogout) onLogout();
+    onBackToHome();
   };
 
   // Actions
@@ -255,7 +267,37 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ onBackToHome }) 
   const verifiedCount = tools.filter(t => t.verified).length;
   const totalClicks = tools.reduce((acc, t) => acc + (t.clicks || 0), 0);
 
-  // Login Gate
+  // Unauthorized Access Check: If user attempts /admin without unlocking gate
+  if (!isAuthenticated && !isUnlockedGate) {
+    return (
+      <div className="bg-[#000000] text-white min-h-screen pt-32 pb-20 flex items-center justify-center p-4 select-none">
+        <div className="relative w-full max-w-md bg-[#000000] text-white border-2 border-red-600 p-8 shadow-[10px_10px_0px_#FF4D00] text-center space-y-4">
+          <div className="w-16 h-16 bg-red-600 text-white border-2 border-white flex items-center justify-center mx-auto mb-2">
+            <Lock className="w-8 h-8" />
+          </div>
+          <h2 className="font-display text-2xl sm:text-3xl uppercase tracking-tight text-white">
+            ACCESS DENIED
+          </h2>
+          <p className="font-mono text-xs text-white/70 uppercase">
+            // 403 FORBIDDEN — ADMINISTRATIVE CLEARANCE REQUIRED
+          </p>
+          <p className="font-mono text-[11px] text-white/50 uppercase leading-relaxed">
+            Direct navigation to this endpoint is restricted. Discovery trigger and authorized passkey credentials required.
+          </p>
+          <div className="pt-2">
+            <button
+              onClick={onBackToHome}
+              className="w-full py-3 bg-[#FF4D00] text-black font-display text-xs uppercase tracking-tight hover:bg-white transition-colors cursor-pointer shadow-[3px_3px_0px_#FFFFFF]"
+            >
+              [ RETURN TO PUBLIC HUB ]
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Login Gate (when unlocked through hidden trigger)
   if (!isAuthenticated) {
     return (
       <div className="bg-[#FF4D00] text-black min-h-screen pt-32 pb-20 flex items-center justify-center p-4 select-none">

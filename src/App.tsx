@@ -25,12 +25,31 @@ import { CategoriesView } from './views/CategoriesView';
 import { TrendingView } from './views/TrendingView';
 import { NewToolsView } from './views/NewToolsView';
 import { FavoritesView } from './views/FavoritesView';
+import { ModesView } from './views/ModesView';
+import { isSecretAdminTrigger } from './services/adminTrigger';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<ActiveTab>('home');
   const [tools, setTools] = useState<AITool[]>(() => toolStorage.getAllTools());
   const [favorites, setFavorites] = useState<string[]>(() => toolStorage.getFavorites());
   const [recentlyUsed, setRecentlyUsed] = useState<AITool[]>(() => toolStorage.getRecentlyUsed());
+
+  // Administrative Authorization State (Checked against secure session storage)
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('aivault_admin_auth') === 'true';
+  });
+
+  // Track if hidden trigger discovery unlocked the login gate
+  const [isUnlockedGate, setIsUnlockedGate] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return sessionStorage.getItem('aivault_admin_auth') === 'true';
+  });
+
+  const handleOpenAdminGateway = useCallback(() => {
+    setIsUnlockedGate(true);
+    setActiveTab('admin');
+  }, []);
 
   // 3-Mode Theme Engine: 'default' (Kinetic Orange) | 'dark' (Cyber Stealth) | 'light' (Studio Paper)
   const { theme, setTheme, cycleTheme } = useTheme();
@@ -156,6 +175,9 @@ export function App() {
         case 'favorites':
           document.title = 'My Saved Tools — AI Vault';
           break;
+        case 'modes':
+          document.title = 'AI Modes — What Do You Want To Do? | AI Vault';
+          break;
         case 'admin':
           document.title = 'Admin Portal — AI Vault';
           break;
@@ -222,6 +244,11 @@ export function App() {
 
   const handleSearchHero = (query: string) => {
     setFilters(prev => ({ ...prev, searchQuery: query }));
+    // Search Privacy: The secret admin trigger is intercepted locally.
+    // It must NEVER be tracked to analytics, saved to search history, or route publicly.
+    if (isSecretAdminTrigger(query)) {
+      return;
+    }
     if (query.trim() && activeTab !== 'explore') {
       setActiveTab('explore');
       analytics.track('search_performed', { query });
@@ -255,6 +282,7 @@ export function App() {
         theme={theme}
         setTheme={setTheme}
         cycleTheme={cycleTheme}
+        isAdmin={isAdminAuthenticated}
       />
 
       {/* View router */}
@@ -276,6 +304,7 @@ export function App() {
             onViewAll={() => setActiveTab('explore')}
             isInstalled={isInstalled}
             onInstallClick={promptInstall}
+            onOpenAdminLogin={handleOpenAdminGateway}
           />
         )}
 
@@ -288,6 +317,7 @@ export function App() {
             onToggleFavorite={handleToggleFavorite}
             onSelectTool={handleSelectTool}
             onOpenTool={handleOpenTool}
+            onOpenAdminLogin={handleOpenAdminGateway}
           />
         )}
 
@@ -295,6 +325,16 @@ export function App() {
           <CategoriesView
             tools={tools}
             onSelectCategory={handleSelectCategory}
+          />
+        )}
+
+        {activeTab === 'modes' && (
+          <ModesView
+            tools={tools}
+            favorites={favorites}
+            onToggleFavorite={handleToggleFavorite}
+            onSelectTool={handleSelectTool}
+            onOpenTool={handleOpenTool}
           />
         )}
 
@@ -332,6 +372,17 @@ export function App() {
         {activeTab === 'admin' && (
           <AdminDashboard
             onBackToHome={() => setActiveTab('home')}
+            onLogout={() => {
+              setIsAdminAuthenticated(false);
+              setIsUnlockedGate(false);
+              sessionStorage.removeItem('aivault_admin_auth');
+              setActiveTab('home');
+            }}
+            onAuthenticated={() => {
+              setIsAdminAuthenticated(true);
+              setIsUnlockedGate(true);
+            }}
+            isUnlockedGate={isUnlockedGate || isAdminAuthenticated}
           />
         )}
       </main>
@@ -342,6 +393,7 @@ export function App() {
         onInstallClick={promptInstall}
         isInstalled={isInstalled}
         onOpenCreator={() => setShowCreatorModal(true)}
+        isAdmin={isAdminAuthenticated}
       />
 
       {/* Mobile Bottom Navigation */}
@@ -351,6 +403,7 @@ export function App() {
         favoritesCount={favorites.length}
         theme={theme}
         cycleTheme={cycleTheme}
+        isAdmin={isAdminAuthenticated}
       />
 
       {/* Modals */}
