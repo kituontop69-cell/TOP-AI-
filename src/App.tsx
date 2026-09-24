@@ -13,6 +13,7 @@ import { ReportModal } from './components/ReportModal';
 import { IOSInstallModal } from './components/IOSInstallModal';
 import { OfflineBanner } from './components/OfflineBanner';
 import { AdminDashboard } from './components/AdminDashboard';
+import { CreatorModal } from './components/CreatorModal';
 
 // Views
 import { HomeView } from './views/HomeView';
@@ -42,6 +43,18 @@ export function App() {
   // Modals state
   const [selectedTool, setSelectedTool] = useState<AITool | null>(null);
   const [reportTool, setReportTool] = useState<AITool | null>(null);
+  const [showCreatorModal, setShowCreatorModal] = useState(false);
+
+  // First-visit Creator popup trigger
+  useEffect(() => {
+    const hasSeen = localStorage.getItem('aivault_creator_popup_dismissed');
+    if (!hasSeen) {
+      const timer = setTimeout(() => {
+        setShowCreatorModal(true);
+      }, 700);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // PWA hook
   const {
@@ -198,6 +211,7 @@ export function App() {
         isInstallable={isInstallable}
         isInstalled={isInstalled}
         onInstallClick={promptInstall}
+        onOpenCreator={() => setShowCreatorModal(true)}
       />
 
       {/* View router */}
@@ -284,6 +298,7 @@ export function App() {
         setActiveTab={setActiveTab}
         onInstallClick={promptInstall}
         isInstalled={isInstalled}
+        onOpenCreator={() => setShowCreatorModal(true)}
       />
 
       {/* Mobile Bottom Navigation */}
@@ -313,6 +328,12 @@ export function App() {
       <IOSInstallModal
         isOpen={showIOSGuide}
         onClose={() => setShowIOSGuide(false)}
+      />
+
+      {/* Creator Spotlight / Welcome Modal */}
+      <CreatorModal
+        isOpen={showCreatorModal}
+        onClose={() => setShowCreatorModal(false)}
       />
 
     </div>

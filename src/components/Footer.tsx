@@ -6,9 +6,15 @@ interface FooterProps {
   setActiveTab: (tab: ActiveTab) => void;
   onInstallClick: () => void;
   isInstalled: boolean;
+  onOpenCreator?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ setActiveTab, onInstallClick, isInstalled }) => {
+export const Footer: React.FC<FooterProps> = ({ 
+  setActiveTab, 
+  onInstallClick, 
+  isInstalled,
+  onOpenCreator 
+}) => {
   return (
     <footer className="relative bg-[#FF4D00] text-[#000000] border-t-2 border-[#000000] overflow-hidden select-none">
       
@@ -29,16 +35,25 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onInstallClick, is
               setActiveTab('explore');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            className="px-8 sm:px-12 py-5 rounded-full bg-[#000000] text-[#FFFFFF] hover:bg-[#FFFFFF] hover:text-[#000000] border-2 border-[#000000] font-display text-lg sm:text-2xl tracking-tight uppercase transition-all duration-200 hover:scale-105 active:scale-95 shadow-[6px_6px_0px_#000000] flex items-center gap-3"
+            className="px-8 sm:px-12 py-5 rounded-full bg-[#000000] text-[#FFFFFF] hover:bg-[#FFFFFF] hover:text-[#000000] border-2 border-[#000000] font-display text-lg sm:text-2xl tracking-tight uppercase transition-all duration-200 hover:scale-105 active:scale-95 shadow-[6px_6px_0px_#000000] flex items-center gap-3 cursor-pointer"
           >
             <span>LAUNCH DIRECTORY</span>
             <ArrowRight className="w-6 h-6" />
           </button>
 
+          {onOpenCreator && (
+            <button
+              onClick={onOpenCreator}
+              className="px-8 py-5 rounded-full bg-[#FFFFFF] text-[#000000] hover:bg-[#000000] hover:text-[#FFFFFF] border-2 border-[#000000] font-mono text-sm sm:text-base font-bold uppercase transition-all duration-200 hover:scale-105 active:scale-95 shadow-[6px_6px_0px_#000000] flex items-center gap-2 cursor-pointer"
+            >
+              <span>ABOUT CREATOR ☕</span>
+            </button>
+          )}
+
           {!isInstalled && (
             <button
               onClick={onInstallClick}
-              className="px-8 py-5 rounded-full bg-[#FFFFFF] text-[#000000] hover:bg-[#000000] hover:text-[#FFFFFF] border-2 border-[#000000] font-mono text-sm sm:text-base font-bold uppercase transition-all duration-200 hover:scale-105 active:scale-95 shadow-[6px_6px_0px_#000000] flex items-center gap-2"
+              className="px-8 py-5 rounded-full bg-[#FFFFFF] text-[#000000] hover:bg-[#000000] hover:text-[#FFFFFF] border-2 border-[#000000] font-mono text-sm sm:text-base font-bold uppercase transition-all duration-200 hover:scale-105 active:scale-95 shadow-[6px_6px_0px_#000000] flex items-center gap-2 cursor-pointer"
             >
               <Download className="w-5 h-5" />
               <span>INSTALL NATIVE PWA</span>
@@ -67,16 +82,24 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onInstallClick, is
           
           <div className="flex items-center gap-2">
             <span className="font-display text-sm tracking-tight">AI VAULT</span>
-            <span>// ARCHIVE COPYRIGHT © {new Date().getFullYear()}</span>
+            <span>// CRAFTED BY KAUSHIK BORUAH © {new Date().getFullYear()}</span>
           </div>
 
           <div className="flex flex-wrap items-center justify-center gap-6 uppercase">
+            {onOpenCreator && (
+              <button
+                onClick={onOpenCreator}
+                className="hover:underline font-black text-black cursor-pointer"
+              >
+                [ CREATOR STORY ☕ ]
+              </button>
+            )}
             <button
               onClick={() => {
                 setActiveTab('explore');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="hover:underline"
+              className="hover:underline cursor-pointer"
             >
               [ EXPLORE ]
             </button>
@@ -85,7 +108,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onInstallClick, is
                 setActiveTab('categories');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="hover:underline"
+              className="hover:underline cursor-pointer"
             >
               [ CATEGORIES ]
             </button>
@@ -94,7 +117,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onInstallClick, is
                 setActiveTab('trending');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="hover:underline"
+              className="hover:underline cursor-pointer"
             >
               [ TRENDING ]
             </button>
@@ -103,7 +126,7 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onInstallClick, is
                 setActiveTab('admin');
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
-              className="hover:underline"
+              className="hover:underline cursor-pointer"
             >
               [ ADMIN PORTAL ]
             </button>

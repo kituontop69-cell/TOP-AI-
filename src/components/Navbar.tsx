@@ -9,7 +9,8 @@ import {
   ShieldCheck, 
   WifiOff,
   Zap,
-  ArrowUpRight
+  ArrowUpRight,
+  Coffee
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -21,6 +22,7 @@ interface NavbarProps {
   isInstallable: boolean;
   isInstalled: boolean;
   onInstallClick: () => void;
+  onOpenCreator?: () => void;
 }
 
 export const Navbar: React.FC<NavbarProps> = ({
@@ -30,7 +32,8 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenSearch,
   isOnline,
   isInstalled,
-  onInstallClick
+  onInstallClick,
+  onOpenCreator
 }) => {
   const navTabs: { id: ActiveTab; label: string; count?: number }[] = [
     { id: 'home', label: 'HOME' },
@@ -98,13 +101,28 @@ export const Navbar: React.FC<NavbarProps> = ({
           {/* Quick Search */}
           <button
             onClick={onOpenSearch}
-            className="p-2 sm:px-3 sm:py-1.5 rounded-full bg-[#000000] text-white border-2 border-[#000000] hover:bg-white hover:text-[#000000] font-mono text-xs font-bold transition-all shadow-xl flex items-center gap-1.5"
+            className="p-2 sm:px-3 sm:py-1.5 rounded-full bg-[#000000] text-white border-2 border-[#000000] hover:bg-white hover:text-[#000000] font-mono text-xs font-bold transition-all shadow-xl flex items-center gap-1.5 cursor-pointer"
             title="Search directory"
             aria-label="Search directory"
           >
             <Search className="w-4 h-4" />
             <span className="hidden sm:inline">FIND</span>
           </button>
+
+          {/* Creator Profile Button */}
+          {onOpenCreator && (
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={onOpenCreator}
+              className="p-2 sm:px-3 sm:py-1.5 rounded-full bg-[#000000] text-[#FF4D00] hover:bg-[#FF4D00] hover:text-black border-2 border-[#000000] font-mono text-xs font-bold transition-all shadow-xl flex items-center gap-1.5 cursor-pointer"
+              title="About the Creator (Kaushik Boruah)"
+              aria-label="Creator Profile"
+            >
+              <Coffee className="w-4 h-4 text-[#FFDD00]" />
+              <span className="hidden lg:inline text-white">CREATOR</span>
+            </motion.button>
+          )}
 
           {/* Connection status badge */}
           {!isOnline && (
