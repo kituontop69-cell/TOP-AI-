@@ -1,0 +1,144 @@
+/* =====================================================================
+   AI VAULT — CINEMATIC EMERGENCY LIGHT PRELOADER STYLES
+   High-performance GPU-composited lighting and atmospheric shaders
+   ===================================================================== */
+
+.cinematic-preloader-root {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999999;
+  background-color: #020205;
+  overflow: hidden;
+  user-select: none;
+  touch-action: none;
+  contain: strict;
+}
+
+/* Atmospheric vignette and depth gradient */
+.cinematic-atmosphere {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: 
+    radial-gradient(circle at 50% 50%, #0a0a14 0%, #04040a 50%, #020205 100%);
+  opacity: 0.95;
+}
+
+/* Subtle cinematic film vignette */
+.cinematic-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 40%, rgba(0, 0, 0, 0.85) 100%);
+  mix-blend-mode: multiply;
+}
+
+/* Volumetric Left Red Emergency Light Beam */
+.emergency-beam-red {
+  position: absolute;
+  top: -20vh;
+  left: -20vw;
+  width: 90vw;
+  height: 140vh;
+  pointer-events: none;
+  transform-origin: 0% 50%;
+  transform: rotate(6deg) skewY(-3deg);
+  background: 
+    radial-gradient(ellipse 70% 60% at 5% 50%, 
+      rgba(255, 20, 40, 0.95) 0%, 
+      rgba(230, 10, 30, 0.65) 25%, 
+      rgba(180, 0, 20, 0.3) 55%, 
+      transparent 80%);
+  filter: blur(45px);
+  mix-blend-mode: screen;
+  will-change: opacity, transform;
+}
+
+/* Volumetric Right Blue Emergency Light Beam */
+.emergency-beam-blue {
+  position: absolute;
+  top: -20vh;
+  right: -20vw;
+  width: 90vw;
+  height: 140vh;
+  pointer-events: none;
+  transform-origin: 100% 50%;
+  transform: rotate(-6deg) skewY(3deg);
+  background: 
+    radial-gradient(ellipse 70% 60% at 95% 50%, 
+      rgba(0, 102, 255, 0.95) 0%, 
+      rgba(0, 70, 240, 0.65) 25%, 
+      rgba(0, 40, 190, 0.3) 55%, 
+      transparent 80%);
+  filter: blur(45px);
+  mix-blend-mode: screen;
+  will-change: opacity, transform;
+}
+
+/* Screen edge bezel light reflections */
+.screen-rim-left {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 4px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, #ff1428 50%, transparent 100%);
+  filter: drop-shadow(2px 0 16px #ff1428);
+}
+
+.screen-rim-right {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 4px;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, #0066ff 50%, transparent 100%);
+  filter: drop-shadow(-2px 0 16px #0066ff);
+}
+
+/* Anamorphic horizontal lens flare line */
+.anamorphic-flare {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  transform: translateY(-50%);
+  background: linear-gradient(90deg, 
+    transparent 0%, 
+    rgba(255, 20, 40, 0.4) 25%, 
+    rgba(255, 255, 255, 0.95) 50%, 
+    rgba(0, 102, 255, 0.4) 75%, 
+    transparent 100%);
+  filter: blur(1px);
+  mix-blend-mode: screen;
+}
+
+/* Center Cool-White Climax Flash */
+.climax-flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at center, #ffffff 0%, rgba(200, 230, 255, 0.7) 40%, transparent 80%);
+  mix-blend-mode: screen;
+  will-change: opacity;
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+  .emergency-beam-red,
+  .emergency-beam-blue {
+    filter: blur(60px);
+    transform: none !important;
+  }
+
+  .anamorphic-flare,
+  .climax-flash {
+    display: none !important;
+  }
+}

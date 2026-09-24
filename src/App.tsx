@@ -14,6 +14,7 @@ import { IOSInstallModal } from './components/IOSInstallModal';
 import { OfflineBanner } from './components/OfflineBanner';
 import { AdminDashboard } from './components/AdminDashboard';
 import { CreatorModal } from './components/CreatorModal';
+import { CinematicPreloader, PRELOADER_CONFIG } from './components/CinematicPreloader';
 
 // Views
 import { HomeView } from './views/HomeView';
@@ -45,8 +46,25 @@ export function App() {
   const [reportTool, setReportTool] = useState<AITool | null>(null);
   const [showCreatorModal, setShowCreatorModal] = useState(false);
 
-  // First-visit Creator popup trigger
+  // Cinematic 5-Second Emergency Preloader State
+  const [isLoadingPreloader, setIsLoadingPreloader] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    if (PRELOADER_CONFIG.SHOW_EVERY_LOAD) return true;
+    return !localStorage.getItem(PRELOADER_CONFIG.STORAGE_KEY);
+  });
+
+  const handlePreloaderComplete = useCallback(() => {
+    setIsLoadingPreloader(false);
+    if (!PRELOADER_CONFIG.SHOW_EVERY_LOAD) {
+      try {
+        localStorage.setItem(PRELOADER_CONFIG.STORAGE_KEY, 'true');
+      } catch {}
+    }
+  }, []);
+
+  // First-visit Creator popup trigger (runs cleanly after cinematic preloader finishes)
   useEffect(() => {
+    if (isLoadingPreloader) return;
     const hasSeen = localStorage.getItem('aivault_creator_popup_dismissed');
     if (!hasSeen) {
       const timer = setTimeout(() => {
@@ -54,7 +72,7 @@ export function App() {
       }, 700);
       return () => clearTimeout(timer);
     }
-  }, []);
+  }, [isLoadingPreloader]);
 
   // PWA hook
   const {
@@ -195,7 +213,11 @@ export function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#FF4D00] text-[#000000] selection:bg-black selection:text-[#FF4D00] pb-safe md:pb-0">
-      
+      {/* Cinematic 5-Second Emergency Preloader */}
+      {isLoadingPreloader && (
+        <CinematicPreloader onComplete={handlePreloaderComplete} />
+      )}
+
       {/* Offline banner */}
       <OfflineBanner isOnline={isOnline} />
 
